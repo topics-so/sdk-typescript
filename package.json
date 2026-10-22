@@ -1,0 +1,76 @@
+{
+	"name": "@topics-so/sdk",
+	"version": "0.1.2",
+	"description": "The official TypeScript client for the Topics.so API: posts and metrics, brand kit, assets, cast members, image and video generation, sounds, series, and autopilot.",
+	"keywords": [
+		"topics.so",
+		"topics",
+		"instagram",
+		"tiktok",
+		"social media",
+		"ai images",
+		"sdk",
+		"api"
+	],
+	"homepage": "https://topics.so/docs/api#sdk",
+	"bugs": {
+		"url": "https://github.com/topics-so/sdk-typescript/issues",
+		"email": "support@topics.so"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/topics-so/sdk-typescript.git"
+	},
+	"license": "MIT",
+	"author": "Don't Stop, LLC <support@topics.so>",
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.cts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
+		},
+		"./package.json": "./package.json",
+		"./openapi.json": "./openapi.json"
+	},
+	"files": [
+		"dist",
+		"openapi.json",
+		"CHANGELOG.md",
+		"LICENSE"
+	],
+	"sideEffects": false,
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"generate": "openapi-typescript openapi.json -o src/generated/schema.ts && node scripts/generate.ts && prettier --write src/generated --log-level warn",
+		"build": "tsdown",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"check": "publint && attw --pack . && size-limit",
+		"prepublishOnly": "pnpm build && pnpm check"
+	},
+	"devDependencies": {
+		"@arethetypeswrong/cli": "^0.18.5",
+		"@size-limit/preset-small-lib": "^14.2.0",
+		"@types/node": "^26.6.5",
+		"openapi-typescript": "^7.13.0",
+		"publint": "^0.3.25",
+		"size-limit": "^14.2.0",
+		"tsdown": "^0.23.1",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.11"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

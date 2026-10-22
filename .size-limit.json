@@ -1,0 +1,8 @@
+[
+	{
+		"name": "Topics client, ESM",
+		"path": "dist/index.js",
+		"import": "{ Topics }",
+		"limit": "8 kB"
+	}
+]
