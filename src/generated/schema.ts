@@ -13,7 +13,7 @@ export interface paths {
 		};
 		/**
 		 * List posts
-		 * @description Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics.
+		 * @description Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics. Posts deleted, archived, or made private on the platform are left out unless `includeRemoved` is true.
 		 */
 		get: operations["list-posts"];
 		put?: never;
@@ -33,7 +33,7 @@ export interface paths {
 		};
 		/**
 		 * Retrieve a post
-		 * @description One post by id, with its full metric history and its media. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.
+		 * @description One post by id, with its full metric history and its media, including a post removed from the platform, which has `removedAt` set. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.
 		 */
 		get: operations["get-post"];
 		put?: never;
@@ -1591,6 +1591,11 @@ export interface components {
 			mediaUrls: string[];
 			/** Format: date-time */
 			publishedAt: string;
+			/**
+			 * Format: date-time
+			 * @description When the platform stopped serving the post: deleted, archived, or made private. Null while it is live.
+			 */
+			removedAt: string | null;
 			metrics: components["schemas"]["PostMetrics"];
 		};
 		/** @description One image or video of a post, with what analysis found in it. An analysis field is null until it has run, or when it found nothing. */
@@ -1776,6 +1781,8 @@ export interface operations {
 				sort?: "published" | "views" | "impressions" | "reach" | "likes" | "comments" | "shares" | "saves" | "clicks" | "engagementRate";
 				/** @description Sort direction. */
 				dir?: "asc" | "desc";
+				/** @description Also list posts that were deleted, archived, or made private on the platform. Their `removedAt` is set. */
+				includeRemoved?: boolean;
 			};
 			header?: never;
 			path?: never;

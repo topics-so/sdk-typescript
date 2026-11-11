@@ -28,7 +28,7 @@
 					"posts"
 				],
 				"summary": "List posts",
-				"description": "Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics.",
+				"description": "Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics. Posts deleted, archived, or made private on the platform are left out unless `includeRemoved` is true.",
 				"security": [
 					{
 						"bearerAuth": []
@@ -166,6 +166,16 @@
 							],
 							"default": "desc"
 						}
+					},
+					{
+						"name": "includeRemoved",
+						"in": "query",
+						"required": false,
+						"description": "Also list posts that were deleted, archived, or made private on the platform. Their `removedAt` is set.",
+						"schema": {
+							"type": "boolean",
+							"default": false
+						}
 					}
 				],
 				"responses": {
@@ -251,7 +261,7 @@
 					"posts"
 				],
 				"summary": "Retrieve a post",
-				"description": "One post by id, with its full metric history and its media. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.",
+				"description": "One post by id, with its full metric history and its media, including a post removed from the platform, which has `removedAt` set. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.",
 				"security": [
 					{
 						"bearerAuth": []
@@ -8199,6 +8209,7 @@
 					"thumbnailUrl",
 					"mediaUrls",
 					"publishedAt",
+					"removedAt",
 					"metrics"
 				],
 				"properties": {
@@ -8264,6 +8275,14 @@
 					"publishedAt": {
 						"type": "string",
 						"format": "date-time"
+					},
+					"removedAt": {
+						"type": [
+							"string",
+							"null"
+						],
+						"format": "date-time",
+						"description": "When the platform stopped serving the post: deleted, archived, or made private. Null while it is live."
 					},
 					"metrics": {
 						"$ref": "#/components/schemas/PostMetrics"

@@ -417,7 +417,7 @@ export class PostsResource extends APIResource {
 	/**
 	 * List posts.
 	 *
-	 * Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics.
+	 * Every post across your connected accounts, newest first by default. Filter, search, sort, and page through them the same way the dashboard does. Each post carries its latest metrics. Posts deleted, archived, or made private on the platform are left out unless `includeRemoved` is true.
 	 */
 	list(params?: PostsListParams, options?: RequestOptions): PagePromise<Post> {
 		return this._client.getPage<Post>("/v1/posts", params, options);
@@ -426,7 +426,7 @@ export class PostsResource extends APIResource {
 	/**
 	 * Retrieve a post.
 	 *
-	 * One post by id, with its full metric history and its media. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.
+	 * One post by id, with its full metric history and its media, including a post removed from the platform, which has `removedAt` set. Snapshots are cumulative lifetime readings, oldest first, so a daily series is the difference between consecutive entries. Each image or video carries its hook, description, transcript, and on-screen text.
 	 */
 	get(id: string, options?: RequestOptions): APIPromise<PostDetail> {
 		return this._client.request<PostDetail>("get", `/v1/posts/${encodeURIComponent(id)}`, { options });
