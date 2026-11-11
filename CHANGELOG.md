@@ -1,5 +1,11 @@
 # @topics-so/sdk
 
+## 0.3.0
+
+### Minor Changes
+
+- b773dc6: `topics.posts.list()` leaves out posts deleted, archived, or made private on the platform; pass `includeRemoved: true` to bring them back. Every post now carries `removedAt`, and `topics.posts.get()` lists only the slides still on the post.
+
 ## 0.2.0
 
 ### Minor Changes

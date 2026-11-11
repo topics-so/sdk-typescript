@@ -1,6 +1,6 @@
 {
 	"name": "@topics-so/sdk",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "The official TypeScript client for the Topics.so API: posts and metrics, brand kit, assets, cast members, image and video generation, sounds, series, and autopilot.",
 	"keywords": [
 		"topics.so",
