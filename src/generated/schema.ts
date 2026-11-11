@@ -44,6 +44,26 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/v1/accounts": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		/**
+		 * List accounts
+		 * @description Every social account connected to the brand, oldest connection first, with its handle, profile picture, profile link, and follower count. The count is the newest daily reading, the same one the Followers page shows. An account whose connection has lapsed is still listed, with `needsReconnect` set, and its count stops updating until it is reconnected.
+		 */
+		get: operations["list-accounts"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/v1/brand-kit": {
 		parameters: {
 			query?: never;
@@ -1523,6 +1543,35 @@ export interface components {
 			/** Format: date-time */
 			capturedAt: string;
 		};
+		Account: {
+			id: string;
+			/** @enum {string} */
+			platform: "instagram" | "linkedin" | "tiktok" | "youtube";
+			/** @description Without the leading @. */
+			handle: string;
+			displayName: string;
+			/**
+			 * Format: uri
+			 * @description Null when the platform doesn't expose a profile picture or the account has none.
+			 */
+			avatarUrl: string | null;
+			/**
+			 * Format: uri
+			 * @description The public profile on the platform.
+			 */
+			profileUrl: string;
+			followerCount: number;
+			/**
+			 * Format: date-time
+			 * @description When `followerCount` was read. Null before the first daily reading, when the count is the one taken at connect.
+			 */
+			followersUpdatedAt: string | null;
+			/** @description The connection has lapsed, so the count has stopped updating. */
+			needsReconnect: boolean;
+		};
+		AccountList: {
+			data: components["schemas"]["Account"][];
+		};
 		Post: {
 			id: string;
 			/** @enum {string} */
@@ -1796,6 +1845,46 @@ export interface operations {
 				};
 				content: {
 					"application/json": components["schemas"]["PostDetail"];
+				};
+			};
+			400: components["responses"]["400"];
+			401: components["responses"]["401"];
+			402: components["responses"]["402"];
+			403: components["responses"]["403"];
+			404: components["responses"]["404"];
+			409: components["responses"]["409"];
+			429: components["responses"]["429"];
+			503: components["responses"]["503"];
+		};
+	};
+	"list-accounts": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description List accounts */
+			200: {
+				headers: {
+					/** @description Requests allowed in one second. */
+					"X-RateLimit-Limit"?: number;
+					/** @description Requests left in the current second. */
+					"X-RateLimit-Remaining"?: number;
+					/** @description Unix time, in seconds, when the current window resets. */
+					"X-RateLimit-Reset"?: number;
+					/** @description Requests allowed this calendar month. */
+					"X-Quota-Limit"?: number;
+					/** @description Requests left this calendar month. */
+					"X-Quota-Remaining"?: number;
+					/** @description Identifies this request. Quote it when you contact support. */
+					"X-Request-Id"?: string;
+					[name: string]: unknown;
+				};
+				content: {
+					"application/json": components["schemas"]["AccountList"];
 				};
 			};
 			400: components["responses"]["400"];

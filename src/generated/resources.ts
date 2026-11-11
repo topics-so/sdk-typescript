@@ -4,6 +4,7 @@ import type { RequestOptions } from "../core/client";
 import type { PagePromise } from "../core/pagination";
 import { APIResource } from "../core/resource";
 import type {
+	Account,
 	AnimateInput,
 	Asset,
 	AssetCreateInput,
@@ -130,6 +131,17 @@ export class SeriesItemsResource extends APIResource {
 			body,
 			options
 		});
+	}
+}
+
+export class AccountsResource extends APIResource {
+	/**
+	 * List accounts.
+	 *
+	 * Every social account connected to the brand, oldest connection first, with its handle, profile picture, profile link, and follower count. The count is the newest daily reading, the same one the Followers page shows. An account whose connection has lapsed is still listed, with `needsReconnect` set, and its count stops updating until it is reconnected.
+	 */
+	list(options?: RequestOptions): PagePromise<Account> {
+		return this._client.getPage<Account>("/v1/accounts", undefined, options);
 	}
 }
 

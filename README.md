@@ -35,6 +35,7 @@ const image = await topics.creations.generateImage({
 - [Quickstart](#quickstart)
 - [Images and video](#images-and-video)
 - [Lists](#lists)
+- [Accounts](#accounts)
 - [Uploads](#uploads)
 - [Errors](#errors)
 - [Retries and idempotency](#retries-and-idempotency)
@@ -148,6 +149,20 @@ if (page.hasNextPage()) {
 	const next = await page.nextPage();
 }
 ```
+
+## Accounts
+
+`accounts.list` returns every connected account with its handle, profile picture, profile link, and follower count. It needs a key with the `postsRead` scope.
+
+```ts
+const { data: accounts } = await topics.accounts.list();
+
+for (const account of accounts) {
+	console.log(account.platform, account.handle, account.followerCount);
+}
+```
+
+The count is the newest daily reading, taken at `followersUpdatedAt`. When `needsReconnect` is true, the count has stopped updating.
 
 ## Uploads
 
@@ -321,6 +336,12 @@ Every method below links to its full reference, with parameters, responses, and 
 | --- | --- |
 | `list(params?)` | [List posts](https://topics.so/docs/api#list-posts) |
 | `get(id)` | [Retrieve a post](https://topics.so/docs/api#get-post) |
+
+### `topics.accounts`
+
+| Method | What it does |
+| --- | --- |
+| `list()` | [List accounts](https://topics.so/docs/api#list-accounts) |
 
 ### `topics.brandKit`
 

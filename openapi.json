@@ -349,6 +349,101 @@
 				}
 			}
 		},
+		"/v1/accounts": {
+			"get": {
+				"operationId": "list-accounts",
+				"tags": [
+					"accounts"
+				],
+				"summary": "List accounts",
+				"description": "Every social account connected to the brand, oldest connection first, with its handle, profile picture, profile link, and follower count. The count is the newest daily reading, the same one the Followers page shows. An account whose connection has lapsed is still listed, with `needsReconnect` set, and its count stops updating until it is reconnected.",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"x-scopes": [
+					"postsRead"
+				],
+				"x-sdk-resource": "accounts",
+				"x-sdk-method": "list",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "List accounts",
+						"headers": {
+							"X-RateLimit-Limit": {
+								"description": "Requests allowed in one second.",
+								"schema": {
+									"type": "integer"
+								}
+							},
+							"X-RateLimit-Remaining": {
+								"description": "Requests left in the current second.",
+								"schema": {
+									"type": "integer"
+								}
+							},
+							"X-RateLimit-Reset": {
+								"description": "Unix time, in seconds, when the current window resets.",
+								"schema": {
+									"type": "integer"
+								}
+							},
+							"X-Quota-Limit": {
+								"description": "Requests allowed this calendar month.",
+								"schema": {
+									"type": "integer"
+								}
+							},
+							"X-Quota-Remaining": {
+								"description": "Requests left this calendar month.",
+								"schema": {
+									"type": "integer"
+								}
+							},
+							"X-Request-Id": {
+								"description": "Identifies this request. Quote it when you contact support.",
+								"schema": {
+									"type": "string"
+								}
+							}
+						},
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AccountList"
+								}
+							}
+						}
+					},
+					"400": {
+						"$ref": "#/components/responses/400"
+					},
+					"401": {
+						"$ref": "#/components/responses/401"
+					},
+					"402": {
+						"$ref": "#/components/responses/402"
+					},
+					"403": {
+						"$ref": "#/components/responses/403"
+					},
+					"404": {
+						"$ref": "#/components/responses/404"
+					},
+					"409": {
+						"$ref": "#/components/responses/409"
+					},
+					"429": {
+						"$ref": "#/components/responses/429"
+					},
+					"503": {
+						"$ref": "#/components/responses/503"
+					}
+				}
+			}
+		},
 		"/v1/brand-kit": {
 			"get": {
 				"operationId": "get-brand-kit",
@@ -8011,6 +8106,83 @@
 					"capturedAt": {
 						"type": "string",
 						"format": "date-time"
+					}
+				}
+			},
+			"Account": {
+				"type": "object",
+				"required": [
+					"id",
+					"platform",
+					"handle",
+					"displayName",
+					"avatarUrl",
+					"profileUrl",
+					"followerCount",
+					"followersUpdatedAt",
+					"needsReconnect"
+				],
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"platform": {
+						"type": "string",
+						"enum": [
+							"instagram",
+							"linkedin",
+							"tiktok",
+							"youtube"
+						]
+					},
+					"handle": {
+						"type": "string",
+						"description": "Without the leading @."
+					},
+					"displayName": {
+						"type": "string"
+					},
+					"avatarUrl": {
+						"type": [
+							"string",
+							"null"
+						],
+						"format": "uri",
+						"description": "Null when the platform doesn't expose a profile picture or the account has none."
+					},
+					"profileUrl": {
+						"type": "string",
+						"format": "uri",
+						"description": "The public profile on the platform."
+					},
+					"followerCount": {
+						"type": "integer"
+					},
+					"followersUpdatedAt": {
+						"type": [
+							"string",
+							"null"
+						],
+						"format": "date-time",
+						"description": "When `followerCount` was read. Null before the first daily reading, when the count is the one taken at connect."
+					},
+					"needsReconnect": {
+						"type": "boolean",
+						"description": "The connection has lapsed, so the count has stopped updating."
+					}
+				}
+			},
+			"AccountList": {
+				"type": "object",
+				"required": [
+					"data"
+				],
+				"properties": {
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Account"
+						}
 					}
 				}
 			},
