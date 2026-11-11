@@ -1,5 +1,11 @@
 # @topics-so/sdk
 
+## 0.2.0
+
+### Minor Changes
+
+- c1ccd96: `topics.accounts.list()` returns the brand's connected accounts with their handle, profile picture, profile link and follower count.
+
 ## 0.1.2
 
 ### Patch Changes
